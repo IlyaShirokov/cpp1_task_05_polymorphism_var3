@@ -12,7 +12,7 @@ std::ostream& operator<< (std::ostream &out, const TextDocument &textdocument)
     int currentPosition = 1;
     for (std::string::const_iterator it = textdocument.content.begin(); it != textdocument.content.end(); ++it)
     {
-        if (*it == '\r')
+        if (*it == '\r' || *it == '\n')
         {
             out << std::endl;
             currentPosition = 1;
@@ -218,6 +218,10 @@ void Table::createTableToOutput()
         parsedString.push_back(currentItem);
     }
 
+    for (int l = 0; l < widthOutput - 1; ++l)
+        table_stream << '=';
+    table_stream << '\n';
+
     for(size_t i = 0; i < content.size() / m_amountColumns; ++i)
     {
         std::vector<std::vector<std::string>> findMaxLength;
@@ -233,19 +237,22 @@ void Table::createTableToOutput()
 
         for (unsigned int j = 0; j < maxLength; ++j) //количество строк контента в одной строке таблицы
         {
+            table_stream << '|';
             for (int k = 0; k < m_amountColumns; ++k) //количевто столбцов
             {
                 if (j >= parsedString.at(i * m_amountColumns + k).size())
-                    table_stream << std::left << std::setfill(' ') << std::setw (m_widthColumns.at(k) + 3) << ' ';
+                    table_stream << std::left << std::setfill(' ') << std::setw (m_widthColumns.at(k) * ((widthOutput - m_amountColumns)/100.0)) << ' ';
                 else
-                    table_stream << std::left << std::setfill(' ') << std::setw (m_widthColumns.at(k) + 3) << parsedString.at(i * m_amountColumns + k).at(j);
+                    table_stream << std::left << std::setfill(' ') << std::setw (m_widthColumns.at(k) * ((widthOutput - m_amountColumns)/100.0)) << parsedString.at(i * m_amountColumns + k).at(j);
                 table_stream << '|';
             }
             table_stream << std::endl;
         }
-        table_stream << "\n========================================================================================\n";
+
+        for (int l = 0; l < widthOutput - 1; ++l)
+            table_stream << '=';
+        table_stream << '\n';
     }
 
     content = table_stream.str();
-    std::cout << content;
 }
