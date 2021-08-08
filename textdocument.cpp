@@ -174,82 +174,78 @@ void Table::createTableToOutput()
     content.erase(std::remove(content.begin(), content.end(), ','), content.end());
     content.erase(std::remove(content.begin(), content.end(), ' '), content.end());
 
-    std::ofstream tempOutputFile;
-    tempOutputFile.open("tempOutputFile.txt", std::ios::binary);
+    std::stringstream table_stream;
+    std::vector<std::vector<std::string>> parsedString;
 
-    makeHorizontalLines(tempOutputFile, 0);
-    makeVerticalLines(tempOutputFile, 5);
-    makeHorizontalLines(tempOutputFile, 5);
-    int currentPos = 0;
+    for(size_t i = 0; i < content.size(); ++i)
+    {
+        std::string delimiter = "\n";
+        std::string tempContent;
+        std::vector<std::string> currentItem;
+
+        switch (content.at(i))
+        {
+        case 'A':
+        {
+            std::stringstream tmp_str;
+            m_art->setOutputWidth(m_widthColumns.at((i % m_amountColumns)) * ((widthOutput - m_amountColumns)/100.0));
+            tmp_str << *m_art;
+            tempContent = tmp_str.str();
+            break;
+        }
+        case 'P':
+        {
+            std::stringstream tmp_str;
+            m_paragraph->setOutputWidth(m_widthColumns.at((i % m_amountColumns)) * ((widthOutput - m_amountColumns)/100.0));
+            tmp_str << *m_paragraph;
+            tempContent = tmp_str.str();
+            break;
+        }
+        case 'T':
+        {
+            //реализую позже после отладки существующей части
+        }
+        }
+
+        size_t pos = 0;
+        std::string token;
+        while ((pos = tempContent.find(delimiter)) != std::string::npos)
+        {
+            token = tempContent.substr(0, pos);
+            currentItem.push_back(token);
+            tempContent.erase(0, pos + delimiter.length());
+        }
+        parsedString.push_back(currentItem);
+    }
 
     for(size_t i = 0; i < content.size() / m_amountColumns; ++i)
     {
+        std::vector<std::vector<std::string>> findMaxLength;
+        unsigned int maxLength = 0;
+
         for (int j = 0; j < m_amountColumns; ++j)
         {
-            switch (content.at(i*m_amountColumns + j))
-            {
-            case 'A':
-            {
-                m_art->setOutputWidth(m_widthColumns.at((i*m_amountColumns + j) % m_amountColumns) * ((widthOutput - m_amountColumns)/100.0));
-                //tempOutputFile << *m_art;
-            }
-            case 'P':
-            {
-                m_paragraph->setOutputWidth(m_widthColumns.at((i*m_amountColumns + j) % m_amountColumns) * ((widthOutput - m_amountColumns)/100.0));
-                //tempOutputFile << *m_paragraph;
-            }
-            case 'T':
-            {
-                //реализую позже после отладки существующей части
-            }
-            }
+            findMaxLength.push_back(parsedString.at(i*m_amountColumns + j));
+
+            if (parsedString.at(i*m_amountColumns + j).size() > maxLength)
+                maxLength = parsedString.at(i*m_amountColumns + j).size() + 1;
         }
 
-        tempOutputFile.seekp(0, std::ios::end);
-        currentPos = tempOutputFile.tellp();
-        break;
-    }
-std::cout << currentPos;
-
-    tempOutputFile.close();
-    //remove("tempOutputFile.txt");
-}
-
-void Table::makeHorizontalLines(std::ofstream &tempOutputFile, int offset)
-{
-//    tempOutputFile.seekp(0, std::ios::beg);
-//    if (offset != 0)
-//    {
-//        tempOutputFile.seekp(0, std::ios::end);
-//        //tempOutputFile << "\n\r";
-//        //offset = offset * (widthOutput - m_amountColumns);
-//        //tempOutputFile.seekp(offset, std::ios::beg);
-//        for(int j = 0; j < widthOutput - m_amountColumns; ++j)
-//            tempOutputFile << '=';
-//    }
-//    else
-//    {
-//        for(int i = 0; i < widthOutput - m_amountColumns; ++i)
-//            tempOutputFile << '=';
-//    }
-//    tempOutputFile.seekp(0, std::ios::beg);
-
-    tempOutputFile.seekp(0, std::ios::end);
-    for(int j = 0; j < widthOutput - m_amountColumns; ++j)
-        tempOutputFile << '=';
-    tempOutputFile.seekp(0, std::ios::beg);
-}
-
-void Table::makeVerticalLines(std::ofstream &tempOutputFile, int offset)
-{
-    for (int amountStr = 0; amountStr < offset; ++amountStr)
-    {
-        for(size_t i = 0; i < m_widthColumns.size() - 1; ++i)
+        for (unsigned int j = 0; j < maxLength; ++j) //количество строк контента в одной строке таблицы
         {
-            tempOutputFile.seekp(m_widthColumns.at(i) * ((widthOutput - m_amountColumns)/100.0), std::ios::cur);
-            tempOutputFile << '|';
+            for (int k = 0; k < m_amountColumns; ++k) //количевто столбцов
+            {
+                if (j >= parsedString.at(i * m_amountColumns + k).size())
+                    table_stream << std::left << std::setfill(' ') << std::setw (m_widthColumns.at(k) + 3) << ' ';
+                else
+                    table_stream << std::left << std::setfill(' ') << std::setw (m_widthColumns.at(k) + 3) << parsedString.at(i * m_amountColumns + k).at(j);
+                table_stream << '|';
+            }
+            table_stream << std::endl;
         }
-        tempOutputFile.seekp(0, std::ios::end);
-        tempOutputFile << '\n';
+        table_stream << "\n========================================================================================\n";
     }
+
+    content = table_stream.str();
+    std::cout << content;
 }

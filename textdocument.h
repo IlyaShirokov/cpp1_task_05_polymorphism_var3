@@ -7,7 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#include <map>
+#include <iomanip>
 
 
 class TextDocument
@@ -60,8 +60,6 @@ public:
     int wordCounter() override;
     void readFile() override;
     void setOutputWidth(int width) override;
-    void makeHorizontalLines(std::ofstream &tempOutputFile, int offset);
-    void makeVerticalLines(std::ofstream &tempOutputFile, int offset);
 
 private:
     int m_amountRows;
@@ -69,7 +67,6 @@ private:
     std::vector<int> m_widthColumns;
     ASCII_Art *m_art;
     Paragraph *m_paragraph;
-    std::vector<std::vector<TextDocument*>> outputView;
 };
 
 #endif // TEXTDOCUMENT_H
