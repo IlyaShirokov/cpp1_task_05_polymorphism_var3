@@ -1,0 +1,18 @@
+Returns an iterator to the first element in the range [first, last) that satisfies specific criteria
+1) find searches for an element equal to value
+2) find_if searches for an element for which predicate p returns true
+3) find_if_not searches for an element for which predicate q returns false
+
+       .
+      ":"
+    ___:____     |"\/"|
+  ,'        `.    \  /
+  |  O        \___/  |
+~^~^~^~^~^~^~^~^~^~^~^~^~
+
+20, 25, 20, 35
+A, P, A, P
+A, P, P, A
+A, A, P, P
+A, P, A, P
+P, A, P, A
