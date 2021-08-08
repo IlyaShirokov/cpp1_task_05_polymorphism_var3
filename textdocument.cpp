@@ -188,7 +188,7 @@ void Table::createTableToOutput()
         case 'A':
         {
             std::stringstream tmp_str;
-            m_art->setOutputWidth(m_widthColumns.at((i % m_amountColumns)) * ((widthOutput - m_amountColumns)/100.0));
+            m_art->setOutputWidth(m_widthColumns.at((i % m_amountColumns)) * ((widthOutput - m_amountColumns - 1)/100.0));
             tmp_str << *m_art;
             tempContent = tmp_str.str();
             break;
@@ -196,7 +196,7 @@ void Table::createTableToOutput()
         case 'P':
         {
             std::stringstream tmp_str;
-            m_paragraph->setOutputWidth(m_widthColumns.at((i % m_amountColumns)) * ((widthOutput - m_amountColumns)/100.0));
+            m_paragraph->setOutputWidth(m_widthColumns.at((i % m_amountColumns)) * ((widthOutput - m_amountColumns - 1)/100.0));
             tmp_str << *m_paragraph;
             tempContent = tmp_str.str();
             break;
@@ -241,9 +241,9 @@ void Table::createTableToOutput()
             for (int k = 0; k < m_amountColumns; ++k) //количевто столбцов
             {
                 if (j >= parsedString.at(i * m_amountColumns + k).size())
-                    table_stream << std::left << std::setfill(' ') << std::setw (m_widthColumns.at(k) * ((widthOutput - m_amountColumns)/100.0)) << ' ';
+                    table_stream << std::left << std::setfill(' ') << std::setw (m_widthColumns.at(k) * ((widthOutput - m_amountColumns - 1)/100.0)) << ' ';
                 else
-                    table_stream << std::left << std::setfill(' ') << std::setw (m_widthColumns.at(k) * ((widthOutput - m_amountColumns)/100.0)) << parsedString.at(i * m_amountColumns + k).at(j);
+                    table_stream << std::left << std::setfill(' ') << std::setw (m_widthColumns.at(k) * ((widthOutput - m_amountColumns - 1)/100.0)) << parsedString.at(i * m_amountColumns + k).at(j);
                 table_stream << '|';
             }
             table_stream << std::endl;
