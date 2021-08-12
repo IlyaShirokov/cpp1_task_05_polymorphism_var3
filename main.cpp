@@ -28,7 +28,7 @@ int main()
     bigTable.setTableItems(&ascii_art, &paragraph, &smallTable);
     bigTable.readFile();
     cout << bigTable << endl;
-    //cout << table.wordCounter() << endl;
+    cout << bigTable.wordCounter() << endl;
 
     return 0;
 }

@@ -123,20 +123,29 @@ void Table::setOutputWidth(int width)
 
 int Table::wordCounter()
 {
-    std::list<std::string> parcedWords;
-    std::string delimiter = " ";
-    std::string tempContent = content;
-
-    size_t pos = 0;
-    std::string token;
-    while ((pos = tempContent.find(delimiter)) != std::string::npos)
+    int sum = 0;
+    for(size_t i = 0; i < content.size(); ++i)
     {
-        token = tempContent.substr(0, pos);
-        parcedWords.push_back(token);
-        tempContent.erase(0, pos + delimiter.length());
+        switch (content.at(i))
+        {
+        case 'A':
+        {
+            sum += m_art->wordCounter();
+            break;
+        }
+        case 'P':
+        {
+            sum += m_paragraph->wordCounter();
+            break;
+        }
+        case 'T':
+        {
+            sum += m_table->wordCounter();
+            break;
+        }
+        }
     }
-    amountWords = parcedWords.size();
-    return parcedWords.size();
+    return sum;
 }
 
 void Table::readFile()
