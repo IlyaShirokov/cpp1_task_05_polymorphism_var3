@@ -55,7 +55,7 @@ class Table: public TextDocument
 {
 public:
     Table(std::string path, int width, int amountRows, int amountColumns);
-    void setArtAndParagraph(ASCII_Art *art, Paragraph *paragraph);
+    void setTableItems(ASCII_Art *art, Paragraph *paragraph, Table *table = nullptr);
     void createTableToOutput();
     int wordCounter() override;
     void readFile() override;
@@ -65,6 +65,8 @@ private:
     int m_amountRows;
     int m_amountColumns;
     std::vector<int> m_widthColumns;
+
+    Table *m_table;
     ASCII_Art *m_art;
     Paragraph *m_paragraph;
 };

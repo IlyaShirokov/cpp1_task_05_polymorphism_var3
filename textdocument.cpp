@@ -162,10 +162,11 @@ void Table::readFile()
     createTableToOutput();
 }
 
-void Table::setArtAndParagraph(ASCII_Art *art, Paragraph *paragraph)
+void Table::setTableItems(ASCII_Art *art, Paragraph *paragraph, Table *table)
 {
     m_art = art;
     m_paragraph = paragraph;
+    m_table = table;
 }
 
 void Table::createTableToOutput()
@@ -203,7 +204,11 @@ void Table::createTableToOutput()
         }
         case 'T':
         {
-            //реализую позже после отладки существующей части
+            std::stringstream tmp_str;
+            m_table->setOutputWidth(m_widthColumns.at((i % m_amountColumns)) * ((widthOutput - m_amountColumns - 1)/100.0));
+            tmp_str << *m_table;
+            tempContent = tmp_str.str();
+            break;
         }
         }
 

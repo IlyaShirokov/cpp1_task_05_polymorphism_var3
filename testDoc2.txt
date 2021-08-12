@@ -1,0 +1,20 @@
+Historically, logic has been studied mainly in philosophy (since Antiquity), mathematics (since mid-19th century), and computer science (since mid-20th century). More recently, logic has also been studied in linguistics and in cognitive science. Overall, logic remains a strongly interdisciplinary area of study.
+
+ __         __
+/  \.-"""-./  \
+\    -   -    /
+ |   o   o   |
+ \  .-'''-.  /
+  '-\__Y__/-'
+     `---`
+
+40, 60
+A, P
+P, A
+
+35, 15, 35, 15
+A, P, T, A
+A, P, P, A
+T, A, A, P
+A, P, T, A
+P, A, P, P
