@@ -1,16 +1,21 @@
-#include "textdocument.h"
+#include "ItemOfDocument.h"
 
-int TextDocument::filePosition = 0;
+int ItemOfDocument::filePosition = 0;
 
-TextDocument::TextDocument(std::string path, int width) : widthOutput(width)
+ItemOfDocument::ItemOfDocument(std::string path, int width) : widthOutput(width)
 {
     filePath.open(path, std::ios::binary);
 }
 
-std::ostream& operator<< (std::ostream &out, const TextDocument &textdocument)
+void ItemOfDocument::setOutputWidth(int width)
+{
+    widthOutput = width;
+}
+
+std::ostream& operator<< (std::ostream &out, const ItemOfDocument &itemofdocument)
 {
     int currentPosition = 1;
-    for (std::string::const_iterator it = textdocument.content.begin(); it != textdocument.content.end(); ++it)
+    for (std::string::const_iterator it = itemofdocument.content.begin(); it != itemofdocument.content.end(); ++it)
     {
         if (*it == '\r' || *it == '\n')
         {
@@ -19,7 +24,7 @@ std::ostream& operator<< (std::ostream &out, const TextDocument &textdocument)
             continue;
         }
 
-        if (currentPosition == textdocument.widthOutput)
+        if (currentPosition == itemofdocument.widthOutput)
         {
             out << std::endl;
             out << *it;
@@ -35,12 +40,7 @@ std::ostream& operator<< (std::ostream &out, const TextDocument &textdocument)
     return out;
 }
 
-Paragraph::Paragraph(std::string path, int width) : TextDocument(path, width){}
-
-void Paragraph::setOutputWidth(int width)
-{
-    widthOutput = width;
-}
+Paragraph::Paragraph(std::string path, int width) : ItemOfDocument(path, width){}
 
 int Paragraph::wordCounter()
 {
@@ -62,7 +62,7 @@ int Paragraph::wordCounter()
 
 void Paragraph::readFile()
 {
-    filePath.seekg(TextDocument::filePosition, std::ios::beg);
+    filePath.seekg(ItemOfDocument::filePosition, std::ios::beg);
     std::string buffer;
     while (std::getline(filePath, buffer))
     {
@@ -71,15 +71,10 @@ void Paragraph::readFile()
         else
             content += buffer;
     }
-    TextDocument::filePosition = filePath.tellg();
+    ItemOfDocument::filePosition = filePath.tellg();
 }
 
-ASCII_Art::ASCII_Art(std::string path, int width) : TextDocument(path, width){}
-
-void ASCII_Art::setOutputWidth(int width)
-{
-    widthOutput = width;
-}
+ASCII_Art::ASCII_Art(std::string path, int width) : ItemOfDocument(path, width){}
 
 int ASCII_Art::wordCounter()
 {
@@ -101,7 +96,7 @@ int ASCII_Art::wordCounter()
 
 void ASCII_Art::readFile()
 {
-    filePath.seekg(TextDocument::filePosition, std::ios::beg);
+    filePath.seekg(ItemOfDocument::filePosition, std::ios::beg);
     std::string buffer;
     while (std::getline(filePath, buffer))
     {
@@ -110,16 +105,11 @@ void ASCII_Art::readFile()
         else
             content += buffer;
     }
-    TextDocument::filePosition = filePath.tellg();
+    ItemOfDocument::filePosition = filePath.tellg();
 }
 
-Table::Table(std::string path, int width, int amountRows, int amountColumns) : TextDocument(path, width),
+Table::Table(std::string path, int width, int amountRows, int amountColumns) : ItemOfDocument(path, width),
     m_amountRows(amountRows), m_amountColumns(amountColumns){}
-
-void Table::setOutputWidth(int width)
-{
-    widthOutput = width;
-}
 
 int Table::wordCounter()
 {
@@ -150,7 +140,7 @@ int Table::wordCounter()
 
 void Table::readFile()
 {
-    filePath.seekg(TextDocument::filePosition, std::ios::beg);
+    filePath.seekg(ItemOfDocument::filePosition, std::ios::beg);
     std::string buffer;
 
     std::getline(filePath, buffer);
@@ -166,7 +156,7 @@ void Table::readFile()
         else
             content += buffer;
     }
-    TextDocument::filePosition = filePath.tellg();
+    ItemOfDocument::filePosition = filePath.tellg();
 
     createTableToOutput();
 }

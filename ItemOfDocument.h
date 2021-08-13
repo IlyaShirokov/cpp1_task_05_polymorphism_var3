@@ -1,5 +1,5 @@
-#ifndef TEXTDOCUMENT_H
-#define TEXTDOCUMENT_H
+#ifndef ItemOfDocument_H
+#define ItemOfDocument_H
 
 #include <iostream>
 #include <vector>
@@ -10,16 +10,16 @@
 #include <iomanip>
 
 
-class TextDocument
+class ItemOfDocument
 {
 public:
-    TextDocument(std::string path, int width);
+    ItemOfDocument(std::string path, int width);
 
     virtual int wordCounter() = 0;
     virtual void readFile() = 0;
-    virtual void setOutputWidth(int width) = 0;
+    void setOutputWidth(int width);
 
-    friend std::ostream& operator<< (std::ostream &out, const TextDocument &textdocument);
+    friend std::ostream& operator<< (std::ostream &out, const ItemOfDocument &ItemOfDocument);
 
     static int filePosition;    //переменная, хранящая текущее положение указателя в файле
 
@@ -31,27 +31,25 @@ protected:
 };
 
 
-class Paragraph: public TextDocument
+class Paragraph: public ItemOfDocument
 {
 public:
     Paragraph(std::string path, int width);
     int wordCounter() override;
     void readFile() override;
-    void setOutputWidth(int width) override;
 };
 
 
-class ASCII_Art: public TextDocument
+class ASCII_Art: public ItemOfDocument
 {
 public:
     ASCII_Art(std::string path, int width);
     int wordCounter() override;
     void readFile() override;
-    void setOutputWidth(int width) override;
 };
 
 
-class Table: public TextDocument
+class Table: public ItemOfDocument
 {
 public:
     Table(std::string path, int width, int amountRows, int amountColumns);
@@ -59,7 +57,6 @@ public:
     void createTableToOutput();
     int wordCounter() override;
     void readFile() override;
-    void setOutputWidth(int width) override;
 
 private:
     int m_amountRows;
@@ -71,4 +68,4 @@ private:
     Paragraph *m_paragraph;
 };
 
-#endif // TEXTDOCUMENT_H
+#endif // ItemOfDocument_H

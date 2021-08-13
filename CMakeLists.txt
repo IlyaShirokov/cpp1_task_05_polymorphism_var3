@@ -7,5 +7,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(cpp1_task_05_polymorphism_var3
     main.cpp
-    textdocument.cpp
-    textdocument.h)
+    ItemOfDocument.cpp
+    ItemOfDocument.h)
