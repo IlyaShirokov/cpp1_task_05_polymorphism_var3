@@ -1,4 +1,4 @@
-#include "ItemOfDocument.h"
+#include "itemofdocument.h"
 
 int ItemOfDocument::filePosition = 0;
 

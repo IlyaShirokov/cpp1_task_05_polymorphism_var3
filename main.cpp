@@ -1,5 +1,5 @@
 #include <iostream>
-#include "ItemOfDocument.h"
+#include "itemofdocument.h"
 
 using namespace std;
 
